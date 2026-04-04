@@ -1,0 +1,61 @@
+﻿<Window x:Class="Hangman.NewUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Hangman.Helper"
+        Title="New User" Height="400" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <local:StringToImageConverter x:Key="StringToImage"/>
+    </Window.Resources>
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Text="Enter Username" FontWeight="Bold" 
+                   Margin="0,20,10,5"/>
+
+        <TextBox Grid.Row="1" Grid.Column="0"
+                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="0,0,10,0"/>
+
+        <StackPanel Grid.Row="2" Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Orientation="Vertical"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+            <Image Source="{Binding CurrentImage, Converter={StaticResource StringToImage}}"
+           Stretch="Uniform"
+           MaxHeight="150"
+           MaxWidth="150"/>
+            <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                Margin="0,10,0,0">
+                <Button Content="&lt;&lt;" Command="{Binding PreviousImageCommand}" Width="25" Margin="25,0" Height="25"/>
+                <Button Content="&gt;&gt;" Command="{Binding NextImageCommand}" Width="25" Margin="25,0" Height="25"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Button Grid.Row="4" Grid.Column="0"
+                Content="Cancel"
+                Command="{Binding CancelCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                HorizontalAlignment="Left" Width="80"/>
+
+        <Button Grid.Row="4" Grid.Column="1"
+                Content="Add User"
+                Command="{Binding AddUserCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                HorizontalAlignment="Right" Width="80"/>
+    </Grid>
+</Window>
