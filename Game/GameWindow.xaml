@@ -1,12 +1,159 @@
 ﻿<Window x:Class="Hangman.Game.GameWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Hangman.Game"
-        mc:Ignorable="d"
-        Title="GameWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        xmlns:helper="clr-namespace:Hangman.Helper"
+        Title="Hangman" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="New Game" Command="{Binding NewGameCommand}"/>
+                <MenuItem Header="Open Game" Command="{Binding OpenGameCommand}"/>
+                <MenuItem Header="Save Game" Command="{Binding SaveGameCommand}"/>
+                <MenuItem Header="Statistics" Command="{Binding StatisticsCommand}"/>
+                <MenuItem Header="Cancel" Command="{Binding CancelCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </MenuItem>
+            <MenuItem Header="Categories">
+                <MenuItem Header="All Categories" Command="{Binding SelectCategoryCommand}"
+                          CommandParameter="AllCategories" IsCheckable="True">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Category}" Value="AllCategories">
+                                    <Setter Property="IsChecked" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Mathematics" Command="{Binding SelectCategoryCommand}"
+                          CommandParameter="Mathematics" IsCheckable="True">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Category}" Value="Mathematics">
+                                    <Setter Property="IsChecked" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Programming" Command="{Binding SelectCategoryCommand}"
+                          CommandParameter="Programming" IsCheckable="True">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Category}" Value="Programming">
+                                    <Setter Property="IsChecked" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Physics" Command="{Binding SelectCategoryCommand}"
+                          CommandParameter="Physics" IsCheckable="True">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Category}" Value="Physics">
+                                    <Setter Property="IsChecked" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+                <MenuItem Header="Biology" Command="{Binding SelectCategoryCommand}"
+                          CommandParameter="Biology" IsCheckable="True">
+                    <MenuItem.Style>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Category}" Value="Biology">
+                                    <Setter Property="IsChecked" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <StackPanel Visibility="{Binding IsGameInactive, Converter={StaticResource BoolToVis}}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <TextBlock Text="Welcome to Hangman!"
+                           HorizontalAlignment="Center"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Margin="0,0,0,15"/>
+                <TextBlock Text="Select a category from the menu,"
+                           HorizontalAlignment="Center"
+                           FontSize="16"
+                           Foreground="Gray"/>
+                <TextBlock Text="then press New Game or load a save."
+                           HorizontalAlignment="Center"
+                           FontSize="16"
+                           Foreground="Gray"/>
+            </StackPanel>
+
+            <Grid Visibility="{Binding IsGameActive, Converter={StaticResource BoolToVis}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="{Binding DisplayedWord}"
+                               FontSize="40"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                    <WrapPanel Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10">
+                        <Button Content="A" Command="{Binding GuessLetterCommands[0]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="B" Command="{Binding GuessLetterCommands[1]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="C" Command="{Binding GuessLetterCommands[2]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="D" Command="{Binding GuessLetterCommands[3]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="E" Command="{Binding GuessLetterCommands[4]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="F" Command="{Binding GuessLetterCommands[5]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="G" Command="{Binding GuessLetterCommands[6]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="H" Command="{Binding GuessLetterCommands[7]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="I" Command="{Binding GuessLetterCommands[8]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="J" Command="{Binding GuessLetterCommands[9]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="K" Command="{Binding GuessLetterCommands[10]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="L" Command="{Binding GuessLetterCommands[11]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="M" Command="{Binding GuessLetterCommands[12]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="N" Command="{Binding GuessLetterCommands[13]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="O" Command="{Binding GuessLetterCommands[14]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="P" Command="{Binding GuessLetterCommands[15]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="Q" Command="{Binding GuessLetterCommands[16]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="R" Command="{Binding GuessLetterCommands[17]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="S" Command="{Binding GuessLetterCommands[18]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="T" Command="{Binding GuessLetterCommands[19]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="U" Command="{Binding GuessLetterCommands[20]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="V" Command="{Binding GuessLetterCommands[21]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="W" Command="{Binding GuessLetterCommands[22]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="X" Command="{Binding GuessLetterCommands[23]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="Y" Command="{Binding GuessLetterCommands[24]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="Z" Command="{Binding GuessLetterCommands[25]}" Width="35" Height="35" Margin="3"/>
+                    </WrapPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+    </DockPanel>
 </Window>

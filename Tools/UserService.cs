@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Navigation;
 
 namespace Hangman
 {
     public class UserService
     {
-        private readonly string _filepath = "Data/users.json";
+        private readonly string _filepath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory, "Data", "users.json");
         private List<User>? _users;
         public void LoadUsers()
         {
@@ -24,13 +19,12 @@ namespace Hangman
             string jsonString = File.ReadAllText(_filepath);
             List<User>? users = JsonSerializer.Deserialize<List<User>>(jsonString);
             if (users != null)
-            {
                 _users = users;
-            }
         }
-        private void SaveUsers()
+        public void SaveUsers()
         {
-            Directory.CreateDirectory("Data");
+            Directory.CreateDirectory(Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory, "Data"));
 
             string jsonString = JsonSerializer.Serialize(_users);
             File.WriteAllText(_filepath, jsonString);
@@ -38,7 +32,7 @@ namespace Hangman
 
         public void AddUser(string name, string profilePicturePath)
         {
-            User user = new() { Name = name, ProfilePicturePath = profilePicturePath };
+            User user = new() { Name = name, ImagePath = profilePicturePath };
             _users.Add(user);
             SaveUsers();
         }

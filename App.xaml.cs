@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using Hangman.Dialog_Service;
 using Hangman.Game;
 using Microsoft.Extensions.DependencyInjection;

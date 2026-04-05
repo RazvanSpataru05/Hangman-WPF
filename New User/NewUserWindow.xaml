@@ -34,15 +34,15 @@
             Orientation="Vertical"
             HorizontalAlignment="Center"
             VerticalAlignment="Center">
-            <Image Source="{Binding CurrentImage, Converter={StaticResource StringToImage}}"
+            <Image Source="{Binding ImageSelector.CurrentImage, Converter={StaticResource StringToImage}}"
            Stretch="Uniform"
            MaxHeight="150"
            MaxWidth="150"/>
             <StackPanel Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 Margin="0,10,0,0">
-                <Button Content="&lt;&lt;" Command="{Binding PreviousImageCommand}" Width="25" Margin="25,0" Height="25"/>
-                <Button Content="&gt;&gt;" Command="{Binding NextImageCommand}" Width="25" Margin="25,0" Height="25"/>
+                <Button Content="&lt;&lt;" Command="{Binding ImageSelector.PreviousImageCommand}" Width="25" Margin="25,0" Height="25"/>
+                <Button Content="&gt;&gt;" Command="{Binding ImageSelector.NextImageCommand}" Width="25" Margin="25,0" Height="25"/>
             </StackPanel>
         </StackPanel>
 

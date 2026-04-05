@@ -1,8 +1,5 @@
-﻿using Hangman.Dialog_Service;
-using Microsoft.Win32;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,11 +12,14 @@ namespace Hangman
         private User _selectedUser;
         private ObservableCollection<User> _users;
 
+        public ImageSelectorViewModel ImageSelector { get; set; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
         public RelayCommand NewUserCommand { get; set; }
         public RelayCommand DeleteUserCommand { get; set; }
         public RelayCommand PlayCommand { get; set; }
         public RelayCommand CancelCommand { get; set; }
+        public RelayCommand NextImageCommand { get; set; }
+        public RelayCommand PreviousImageCommand { get; set; }
         public User SelectedUser
         {
             get => _selectedUser;
@@ -30,6 +30,11 @@ namespace Hangman
                     _selectedUser = value;
                     OnPropertyChanged(nameof(SelectedUser));
                     CommandManager.InvalidateRequerySuggested();
+                }
+                if (value != null)
+                {
+                    int index = ImageSelector.Images.IndexOf(value.ImagePath);
+                    ImageSelector.CurrentImageIndex = index >= 0 ? index : 0;
                 }
             }
         }
@@ -57,12 +62,25 @@ namespace Hangman
             DeleteUserCommand = new(_ => DeleteUser(), _ => SelectedUser != null);
             PlayCommand = new(parameter => Play(parameter), _ => SelectedUser != null);
             CancelCommand = new(_ => Cancel());
+
+            NextImageCommand = new(_ =>
+            {
+                ImageSelector.NextImage();
+                SelectedUser.ImagePath = ImageSelector.CurrentImage;
+                _userService.SaveUsers();
+            }, _ => SelectedUser != null);
+            PreviousImageCommand = new(_ =>
+            {
+                ImageSelector.PreviousImage();
+                SelectedUser.ImagePath = ImageSelector.CurrentImage;
+                _userService.SaveUsers();
+            }, _ => SelectedUser != null);
         }
 
         private void NewUser()
         {
             var existingNames = _users.Select(u => u.Name).ToList();
-            var result = _dialogService.ShowNewUserDialog(existingNames, out string name, out string imagePath);
+            var result = _dialogService.ShowNewUserWindow(existingNames, out string name, out string imagePath);
             if (result == true)
             {
                 _userService.AddUser(name, imagePath);
@@ -88,17 +106,11 @@ namespace Hangman
         }
         private void Play(object? parameter)
         {
-            if (SelectedUser == null)
-            {
-                MessageBox.Show("Please select an user first!");
-                return;
-            }
             var window = parameter as Window;
             _dialogService.ShowGameWindow(SelectedUser);
             window?.Close();
         }
-
-        private void Cancel()
+        private static void Cancel()
         {
             Application.Current.Shutdown();
         }
