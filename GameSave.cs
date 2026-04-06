@@ -9,14 +9,24 @@ namespace Hangman
 {
     public class GameSave
     {
-        public uint CurrentLevel { get; set; }
+        public int CurrentLevel { get; set; }
         public HashSet<char> GuessedLetters { get; set; } = [];
-        public uint NumMistakes {  get; set; }
+        public int Mistakes {  get; set; }
         public string Category {  get; set; }
         public string Word { get; set; }
-        public uint TimeLeft { get; set; }
+        public int TimeLeft { get; set; }
 
         [JsonConstructor]
         public GameSave() { }
+
+        public GameSave(int currentLevel, HashSet<char> guessedLetters, int mistakes, string category, string word, int timeLeft)
+        {
+            CurrentLevel = currentLevel;
+            GuessedLetters = guessedLetters;
+            Mistakes = mistakes;
+            Category = category;
+            Word = word;
+            TimeLeft = timeLeft;
+        }
     }
 }

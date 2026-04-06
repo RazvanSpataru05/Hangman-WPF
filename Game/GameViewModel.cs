@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 using System.Windows;
 using Hangman.Tools;
 using System.Text;
-using System.Security.Cryptography;
+using System.Windows.Threading;
+using System.IO;
 
 namespace Hangman.Game
 {
@@ -16,18 +16,26 @@ namespace Hangman.Game
     }
     public class GameViewModel : INotifyPropertyChanged
     {
-        private readonly int maxMistakes = 27;
+        private readonly int maxMistakes = 7;
 
         private GameState _state;
         private readonly IDialogService _dialogService;
         private readonly WordService _wordService = new();
+        private UserService _userService;
+
         private string? _category;
         private int _currentLevel;
+
+        private DispatcherTimer _timer;
         private int _timeLeft;
-        private int _mistakes;
+
         private bool _isGameActive;
         private string _word;
         private string _displayedWord;
+
+        private string _displayedHangmanImage;
+        private int _mistakes;
+        public List<string> HangmanImages { get; set; } = [];
 
         public HashSet<char> GuessedLetters { get; set; } = new();
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -103,7 +111,6 @@ namespace Hangman.Game
                 }
             }
         }
-
         public string Word
         {
             get => _word;
@@ -128,18 +135,47 @@ namespace Hangman.Game
                 }
             }
         }
-        public GameViewModel(User currentUser, IDialogService dialogService)
+        public string DisplayedHangmanImage
+        {
+            get => _displayedHangmanImage;
+            set
+            {
+                if (_displayedHangmanImage != value)
+                {
+                    _displayedHangmanImage = value;
+                    OnPropertyChanged(nameof(DisplayedHangmanImage));
+                }
+            }
+        }
+        public GameViewModel(User currentUser, IDialogService dialogService, UserService userService)
         {
             _dialogService = dialogService;
+            _userService = userService;
             _state = GameState.Ongoing;
             IsGameActive = false;
             CurrentUser = currentUser;
             GuessLetterCommands = new RelayCommand[26];
 
+            _timer = new();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += (s, e) =>
+            {
+                TimeLeft--;
+                if (TimeLeft == 0)
+                {
+                    _timer.Stop();
+                    _state = GameState.Lose;
+                    var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Lose, true);
+                    ResetGame(result);
+                }
+            };
+
             NewGameCommand = new(_ => NewGame(), _ => Category != null);
             SaveGameCommand = new(_ => SaveGame(), _ => IsGameActive == true);
+            OpenGameCommand = new(_ => OpenGame());
             SelectCategoryCommand = new(parameter => SelectCategory(parameter as string));
             CancelCommand = new(parameter => Cancel(parameter));
+            AboutCommand = new(_ => _dialogService.ShowAboutWindow());
 
             for (int i = 0; i < GuessLetterCommands.Length; i++)
             {
@@ -147,7 +183,11 @@ namespace Hangman.Game
                 GuessLetterCommands[i] = new(parameter => GuessLetter(letter),
                     _ => GuessedLetters.Contains(letter) == false);
             }
+            string hangmanPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Hangman");
+            HangmanImages = Directory.GetFiles(hangmanPath, "*.png").ToList();
+            DisplayedHangmanImage = HangmanImages[Mistakes];
         }
+
         private void NewGame()
         {
             if (Category == null) return;
@@ -156,9 +196,20 @@ namespace Hangman.Game
             CurrentLevel = 1;
             SetupGame();
         }
+
         private void SaveGame()
         {
+            GameSave save = new(CurrentLevel, GuessedLetters, Mistakes, Category, Word, TimeLeft);
+            
+        }
 
+        private void OpenGame()
+        {
+            if (CurrentUser.GameSaves.Count == 0)
+            {
+                MessageBox.Show("No saved games found.", "Open Game", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
         }
         private void SelectCategory(string category)
         {
@@ -176,29 +227,35 @@ namespace Hangman.Game
         private void GuessLetter(char letter)
         {
             if (!Word.Contains(letter))
+            {
                 Mistakes++;
+                DisplayedHangmanImage = HangmanImages[Mistakes];
+            }
+            else
+                TimeLeft += 3;
 
             GuessedLetters.Add(letter);
             UpdateDisplayedWord();
             CheckGameState();
             if (_state == GameState.Win)
             {
-                CurrentLevel++;
-                SetupGame();
-            }
-            else if (_state == GameState.Lose)
-            {
-                var result = _dialogService.ShowGameOverWindow(Word);
-                if (result == true)
+                if (CurrentLevel == 3)
                 {
-                    CurrentLevel = 1;
-                    SetupGame();
+                    var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Win, false);
+                    ResetGame(result);
                 }
                 else
                 {
-                    IsGameActive = false;
-                    CurrentLevel = 1;
+                    CurrentLevel++;
+                    MessageBox.Show($"Great job! Moving to level {CurrentLevel}.", "Level Completed",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    SetupGame();
                 }
+            }
+            else if (_state == GameState.Lose)
+            {
+                var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Lose, false);
+                ResetGame(result);
             }
         }
         public void OnPropertyChanged(string propertyName)
@@ -217,6 +274,7 @@ namespace Hangman.Game
             }
             DisplayedWord = sb.ToString();
         }
+
         private void CheckGameState()
         {
             if (Mistakes == maxMistakes)
@@ -224,21 +282,24 @@ namespace Hangman.Game
                 _state = GameState.Lose;
                 return;
             }
-            for (int i= 0; i < Word.Length; i++)
+            for (int i = 0; i < Word.Length; i++)
             {
                 if (Word[i] != DisplayedWord[i])
                     return;
             }
             _state = GameState.Win;
         }
+
         private void SetupGame()
         {
             if (Category == null) return;
 
+            _timer.Start();
             _state = GameState.Ongoing;
             Mistakes = 0;
+            DisplayedHangmanImage = HangmanImages[Mistakes];
             Word = _wordService.GetRandomWord(Category);
-            TimeLeft = 60;
+            TimeLeft = 30;
             GuessedLetters.Clear();
             StringBuilder sb = new();
 
@@ -247,6 +308,19 @@ namespace Hangman.Game
                 sb.Append("_ ");
             }
             DisplayedWord = sb.ToString();
+        }
+
+        private void ResetGame(bool? result)
+        {
+            _timer.Stop();
+            CurrentLevel = 1;
+            if (result == true)
+                SetupGame();
+            else
+            {
+                IsGameActive = false;
+                Category = null;
+            }
         }
     }
 }

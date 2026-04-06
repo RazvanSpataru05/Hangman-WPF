@@ -1,4 +1,7 @@
-﻿using Hangman.Game;
+﻿using Hangman.About;
+using Hangman.Game;
+using System.DirectoryServices.ActiveDirectory;
+using System.Windows;
 
 namespace Hangman.Dialog_Service
 {
@@ -15,15 +18,14 @@ namespace Hangman.Dialog_Service
         {
             var viewModel = new NewUserViewModel(existingNames);
             var window = new NewUserWindow(viewModel);
-            var result = window.ShowDialog();
             name = viewModel.Name;
             imagePath = viewModel.ImageSelector.CurrentImage;
-            return result;
+            return window.ShowDialog();
         }
 
         public void ShowGameWindow(User user)
         {
-            var viewModel = new GameViewModel(user, this);
+            var viewModel = new GameViewModel(user, this, _userService);
             var window = new GameWindow(viewModel);
             window.Show();
         }
@@ -33,11 +35,16 @@ namespace Hangman.Dialog_Service
             var window = new SignInWindow(viewModel);
             window.Show();
         }
-        public bool? ShowGameOverWindow(string word)
+        public bool? ShowGameOverWindow(string word, GameOverType type, bool timeExpired)
         {
-           var viewModel = new GameOverViewModel(word);
-           var window = new GameOverWindow(viewModel);
-           return window.ShowDialog();
+            var viewModel = new GameOverViewModel(word, type, timeExpired);
+            var window = new GameOverWindow(viewModel);
+            return window.ShowDialog();
+        }
+        public void ShowAboutWindow()
+        {
+            var window = new AboutWindow();
+            window.ShowDialog();
         }
     }
 }

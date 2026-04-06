@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helper="clr-namespace:Hangman.Helper"
         Title="Hangman" Height="600" Width="800"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <helper:StringToImageConverter x:Key="StringToImageConverter"/>
     </Window.Resources>
-
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -106,53 +107,94 @@
 
             <Grid Visibility="{Binding IsGameActive, Converter={StaticResource BoolToVis}}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Column="0" Grid.Row="0">
+                    <Image Source="{Binding DisplayedHangmanImage, Converter={StaticResource StringToImageConverter}}"
+                           Stretch="Uniform"
+                           Margin="0 150 0 0"/>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Margin="10 10 0 0">
+                        <TextBlock Text="{Binding CurrentUser.Name}"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Margin="5 5 0 0"/>
+                        <Image Source="{Binding CurrentUser.ImagePath, Converter={StaticResource StringToImageConverter}}"
+                               Width="80" Height="80" Margin="10 5 0 0"
+                               Stretch="Uniform">
+                        </Image>
+                    </StackPanel>
+                </Grid>
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
-                    <TextBlock Text="{Binding DisplayedWord}"
-                               FontSize="40"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
 
-                    <WrapPanel Grid.Row="1"
+                    <TextBlock Grid.Row="0"
+                               HorizontalAlignment="Center"
+                               Margin="150,10,0,0"
+                               FontSize="18">
+                        <Run Text="Time Left: "/>
+                        <Run Text="{Binding TimeLeft}"/>
+                        <Run Text="s"/>
+                    </TextBlock>
+
+                    <Viewbox Grid.Row="1" Stretch="Uniform">
+                        <TextBlock Text="{Binding DisplayedWord}"
+                                   FontSize="40"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Viewbox>
+
+                    <WrapPanel Grid.Row="2"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,10">
-                        <Button Content="A" Command="{Binding GuessLetterCommands[0]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="B" Command="{Binding GuessLetterCommands[1]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="C" Command="{Binding GuessLetterCommands[2]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="D" Command="{Binding GuessLetterCommands[3]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="E" Command="{Binding GuessLetterCommands[4]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="F" Command="{Binding GuessLetterCommands[5]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="G" Command="{Binding GuessLetterCommands[6]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="H" Command="{Binding GuessLetterCommands[7]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="I" Command="{Binding GuessLetterCommands[8]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="J" Command="{Binding GuessLetterCommands[9]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="K" Command="{Binding GuessLetterCommands[10]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="L" Command="{Binding GuessLetterCommands[11]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="M" Command="{Binding GuessLetterCommands[12]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="N" Command="{Binding GuessLetterCommands[13]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="O" Command="{Binding GuessLetterCommands[14]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="P" Command="{Binding GuessLetterCommands[15]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="Q" Command="{Binding GuessLetterCommands[16]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="R" Command="{Binding GuessLetterCommands[17]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="S" Command="{Binding GuessLetterCommands[18]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="T" Command="{Binding GuessLetterCommands[19]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="U" Command="{Binding GuessLetterCommands[20]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="V" Command="{Binding GuessLetterCommands[21]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="W" Command="{Binding GuessLetterCommands[22]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="X" Command="{Binding GuessLetterCommands[23]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="Y" Command="{Binding GuessLetterCommands[24]}" Width="35" Height="35" Margin="3"/>
-                        <Button Content="Z" Command="{Binding GuessLetterCommands[25]}" Width="35" Height="35" Margin="3"/>
+                        <Button Content="A" Command="{Binding GuessLetterCommands[0]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="B" Command="{Binding GuessLetterCommands[1]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="C" Command="{Binding GuessLetterCommands[2]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="D" Command="{Binding GuessLetterCommands[3]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="E" Command="{Binding GuessLetterCommands[4]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="F" Command="{Binding GuessLetterCommands[5]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="G" Command="{Binding GuessLetterCommands[6]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="H" Command="{Binding GuessLetterCommands[7]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="I" Command="{Binding GuessLetterCommands[8]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="J" Command="{Binding GuessLetterCommands[9]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="K" Command="{Binding GuessLetterCommands[10]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="L" Command="{Binding GuessLetterCommands[11]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="M" Command="{Binding GuessLetterCommands[12]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="N" Command="{Binding GuessLetterCommands[13]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="O" Command="{Binding GuessLetterCommands[14]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="P" Command="{Binding GuessLetterCommands[15]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="Q" Command="{Binding GuessLetterCommands[16]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="R" Command="{Binding GuessLetterCommands[17]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="S" Command="{Binding GuessLetterCommands[18]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="T" Command="{Binding GuessLetterCommands[19]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="U" Command="{Binding GuessLetterCommands[20]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="V" Command="{Binding GuessLetterCommands[21]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="W" Command="{Binding GuessLetterCommands[22]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="X" Command="{Binding GuessLetterCommands[23]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="Y" Command="{Binding GuessLetterCommands[24]}" Width="35" Height="35" Margin="5"/>
+                        <Button Content="Z" Command="{Binding GuessLetterCommands[25]}" Width="35" Height="35" Margin="5"/>
                     </WrapPanel>
                 </Grid>
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           VerticalAlignment="Bottom"
+                           Margin="10 5 0 10"
+                           FontSize="18"
+                           Text="{Binding CurrentLevel, StringFormat='Level: {0}/3'}"/>
             </Grid>
         </Grid>
     </DockPanel>

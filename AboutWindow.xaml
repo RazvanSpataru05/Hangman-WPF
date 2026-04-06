@@ -1,0 +1,30 @@
+﻿<Window x:Class="Hangman.About.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hangman.About"
+        mc:Ignorable="d"
+        Title="About" Height="200" Width="350"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+            <TextBlock Text="Spătaru Răzvan-Gabriel"
+                       FontSize="16" FontWeight="Bold"
+                       HorizontalAlignment="Center" Margin="0 0 0 8">
+            </TextBlock>
+
+            <TextBlock Text="Grupa: 10LF244"
+                       FontSize="13"
+                       HorizontalAlignment="Center" Margin="0 0 0 8"/>
+
+            <TextBlock Text="Specializare: Informatică"
+                       HorizontalAlignment="Center"
+                       FontSize="13"
+                       Margin="0 0 0 8">
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
