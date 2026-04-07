@@ -18,9 +18,10 @@ namespace Hangman.Dialog_Service
         {
             var viewModel = new NewUserViewModel(existingNames);
             var window = new NewUserWindow(viewModel);
+            var result = window.ShowDialog();
             name = viewModel.Name;
             imagePath = viewModel.ImageSelector.CurrentImage;
-            return window.ShowDialog();
+            return result;
         }
 
         public void ShowGameWindow(User user)
@@ -44,6 +45,20 @@ namespace Hangman.Dialog_Service
         public void ShowAboutWindow()
         {
             var window = new AboutWindow();
+            window.ShowDialog();
+        }
+        public bool? ShowOpenSaveWindow(List<GameSave> saves, out GameSave selectedSave)
+        {
+            var viewModel = new OpenSaveViewModel(saves);
+            var window = new OpenSaveWindow(viewModel);
+            var result = window.ShowDialog();
+            selectedSave = viewModel.SelectedSave;
+            return result;
+        }
+        public void ShowStatisticsWindow()
+        {
+            var viewModel = new StatisticsViewModel(_userService);
+            var window = new StatisticsWindow(viewModel);
             window.ShowDialog();
         }
     }

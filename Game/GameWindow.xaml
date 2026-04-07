@@ -4,11 +4,17 @@
         xmlns:helper="clr-namespace:Hangman.Helper"
         Title="Hangman" Height="600" Width="800"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        FontFamily="Ink Free">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <helper:StringToImageConverter x:Key="StringToImageConverter"/>
     </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
+                   Stretch="UniformToFill"
+                   Opacity="0.9"/>
+    </Window.Background>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -94,15 +100,16 @@
                            HorizontalAlignment="Center"
                            FontSize="28"
                            FontWeight="Bold"
+                           FontFamily="Ink Free"
                            Margin="0,0,0,15"/>
                 <TextBlock Text="Select a category from the menu,"
                            HorizontalAlignment="Center"
                            FontSize="16"
-                           Foreground="Gray"/>
+                           FontFamily="Ink Free"/>
                 <TextBlock Text="then press New Game or load a save."
                            HorizontalAlignment="Center"
                            FontSize="16"
-                           Foreground="Gray"/>
+                           FontFamily="Ink Free"/>
             </StackPanel>
 
             <Grid Visibility="{Binding IsGameActive, Converter={StaticResource BoolToVis}}">
@@ -126,6 +133,7 @@
                         <TextBlock Text="{Binding CurrentUser.Name}"
                                    FontSize="16"
                                    FontWeight="Bold"
+                                   FontFamily="Ink Free"
                                    VerticalAlignment="Center"
                                    Margin="5 5 0 0"/>
                         <Image Source="{Binding CurrentUser.ImagePath, Converter={StaticResource StringToImageConverter}}"
@@ -145,6 +153,7 @@
                     <TextBlock Grid.Row="0"
                                HorizontalAlignment="Center"
                                Margin="150,10,0,0"
+                               FontFamily="Ink Free"
                                FontSize="18">
                         <Run Text="Time Left: "/>
                         <Run Text="{Binding TimeLeft}"/>
@@ -155,6 +164,7 @@
                         <TextBlock Text="{Binding DisplayedWord}"
                                    FontSize="40"
                                    FontWeight="Bold"
+                                   FontFamily="Ink Free"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
                     </Viewbox>
@@ -194,6 +204,7 @@
                            VerticalAlignment="Bottom"
                            Margin="10 5 0 10"
                            FontSize="18"
+                           FontFamily="Ink Free"
                            Text="{Binding CurrentLevel, StringFormat='Level: {0}/3'}"/>
             </Grid>
         </Grid>

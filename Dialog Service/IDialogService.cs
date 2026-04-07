@@ -9,5 +9,7 @@ namespace Hangman
         void ShowSignUpWindow();
         bool? ShowGameOverWindow(string word, GameOverType type, bool timeExpired);
         void ShowAboutWindow();
+        bool? ShowOpenSaveWindow(List<GameSave> saves, out GameSave selectedSave);
+        void ShowStatisticsWindow();
     }
 }

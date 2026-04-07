@@ -16,7 +16,7 @@ namespace Hangman.Game
     }
     public class GameViewModel : INotifyPropertyChanged
     {
-        private readonly int maxMistakes = 7;
+        private readonly int MAX_MISTAKES = 7;
 
         private GameState _state;
         private readonly IDialogService _dialogService;
@@ -152,9 +152,9 @@ namespace Hangman.Game
             _dialogService = dialogService;
             _userService = userService;
             _state = GameState.Ongoing;
+
             IsGameActive = false;
             CurrentUser = currentUser;
-            GuessLetterCommands = new RelayCommand[26];
 
             _timer = new();
             _timer.Interval = TimeSpan.FromSeconds(1);
@@ -165,6 +165,7 @@ namespace Hangman.Game
                 {
                     _timer.Stop();
                     _state = GameState.Lose;
+                    DisplayedHangmanImage = HangmanImages[HangmanImages.Count - 1];
                     var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Lose, true);
                     ResetGame(result);
                 }
@@ -176,6 +177,8 @@ namespace Hangman.Game
             SelectCategoryCommand = new(parameter => SelectCategory(parameter as string));
             CancelCommand = new(parameter => Cancel(parameter));
             AboutCommand = new(_ => _dialogService.ShowAboutWindow());
+            StatisticsCommand = new(_ => dialogService.ShowStatisticsWindow());
+            GuessLetterCommands = new RelayCommand[26];
 
             for (int i = 0; i < GuessLetterCommands.Length; i++)
             {
@@ -194,21 +197,31 @@ namespace Hangman.Game
 
             IsGameActive = true;
             CurrentLevel = 1;
+            _userService.UpdateStatistics(CurrentUser.Name, Category, false, true);
             SetupGame();
         }
 
         private void SaveGame()
         {
-            GameSave save = new(CurrentLevel, GuessedLetters, Mistakes, Category, Word, TimeLeft);
-            
+            GameSave save = new(CurrentLevel, GuessedLetters, Mistakes, Category, Word, TimeLeft, DateTime.Now);
+            _userService.SaveGame(CurrentUser.Name, save);
+            MessageBox.Show("Game saved successfully!", "Save Game", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void OpenGame()
         {
+            _timer.Stop();
             if (CurrentUser.GameSaves.Count == 0)
             {
                 MessageBox.Show("No saved games found.", "Open Game", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
+            }
+            var result = _dialogService.ShowOpenSaveWindow(CurrentUser.GameSaves, out GameSave selectedSave);
+            if (result != null) _timer.Start();
+
+            if (result == true)
+            {
+                LoadSave(selectedSave);
             }
         }
         private void SelectCategory(string category)
@@ -239,8 +252,10 @@ namespace Hangman.Game
             CheckGameState();
             if (_state == GameState.Win)
             {
+                _timer.Stop();
                 if (CurrentLevel == 3)
                 {
+                    _userService.UpdateStatistics(CurrentUser.Name, Category, true, false);
                     var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Win, false);
                     ResetGame(result);
                 }
@@ -254,6 +269,8 @@ namespace Hangman.Game
             }
             else if (_state == GameState.Lose)
             {
+                _timer.Stop();
+                _userService.UpdateStatistics(CurrentUser.Name, Category, false, false);
                 var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Lose, false);
                 ResetGame(result);
             }
@@ -277,7 +294,7 @@ namespace Hangman.Game
 
         private void CheckGameState()
         {
-            if (Mistakes == maxMistakes)
+            if (Mistakes == MAX_MISTAKES)
             {
                 _state = GameState.Lose;
                 return;
@@ -308,6 +325,19 @@ namespace Hangman.Game
                 sb.Append("_ ");
             }
             DisplayedWord = sb.ToString();
+        }
+        private void LoadSave(GameSave save)
+        {
+            _timer.Start();
+            IsGameActive = true;
+            Word = save.Word;
+            TimeLeft = save.TimeLeft;
+            CurrentLevel = save.CurrentLevel;
+            Mistakes = save.Mistakes;
+            Category = save.Category;
+            GuessedLetters = save.GuessedLetters.ToHashSet<char>();
+            DisplayedHangmanImage = HangmanImages[Mistakes];
+            UpdateDisplayedWord();
         }
 
         private void ResetGame(bool? result)

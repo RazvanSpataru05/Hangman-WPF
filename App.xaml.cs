@@ -1,8 +1,9 @@
-﻿using System.Windows;
-using Hangman.Dialog_Service;
+﻿using Hangman.Dialog_Service;
 using Hangman.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Windows;
+using System.Windows.Media;
 
 namespace Hangman
 {
@@ -12,6 +13,9 @@ namespace Hangman
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            foreach (var font in Fonts.GetFontFamilies(new Uri("pack://application:,,,/"), "./Fonts/"))
+                System.Diagnostics.Debug.WriteLine(font.Source);
 
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>

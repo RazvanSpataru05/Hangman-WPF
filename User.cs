@@ -6,8 +6,9 @@ namespace Hangman
     {
         public string Name {  get; set; }
         public string ImagePath { get; set; }
+
+        [JsonIgnore]
         public List<GameSave> GameSaves { get; set; } = [];
-        public List<Statistics> Statistics { get; set; } = [];
 
         [JsonConstructor]
         public User() {}

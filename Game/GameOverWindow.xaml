@@ -9,6 +9,11 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         ShowInTaskbar="False">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
+                   Stretch="UniformToFill"
+                   Opacity="0.75"/>
+    </Window.Background>
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

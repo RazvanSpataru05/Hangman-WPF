@@ -8,7 +8,13 @@
         Title="About" Height="200" Width="350"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        FontFamily="Ink Free">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
+                   Stretch="UniformToFill"
+                   Opacity="0.9"/>
+    </Window.Background>
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
             <TextBlock Text="Spătaru Răzvan-Gabriel"

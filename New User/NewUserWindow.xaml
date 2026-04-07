@@ -4,10 +4,16 @@
         xmlns:local="clr-namespace:Hangman.Helper"
         Title="New User" Height="400" Width="500"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        FontFamily="Ink Free">
     <Window.Resources>
         <local:StringToImageConverter x:Key="StringToImage"/>
     </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
+                   Stretch="UniformToFill"
+                   Opacity="0.9"/>
+    </Window.Background>
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
