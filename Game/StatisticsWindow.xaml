@@ -6,6 +6,35 @@
         WindowStartupLocation="CenterScreen"
         ShowInTaskbar="False"
         FontFamily="Ink Free">
+
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Ink Free"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+                        </ContentPresenter>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.1" ScaleY="1.1"></ScaleTransform>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Window.Background>
         <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
                    Stretch="UniformToFill"
@@ -17,7 +46,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="{Binding Category}"
+        <TextBlock Grid.Row="0" Text="{Binding DisplayedCategory}"
                    FontSize="24" FontWeight="Bold" FontFamily="Ink Free"
                    HorizontalAlignment="Center" Margin="0 0 0 12"/>
 
@@ -30,6 +59,7 @@
 
             <Button Grid.Column="0" Content="&lt;" Width="25"
                     VerticalAlignment="Center" 
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding PreviousPageCommand}"/>
 
             <DataGrid Grid.Column="1" Margin="8 0"
@@ -48,6 +78,7 @@
 
             <Button Grid.Column="2" Content="&gt;" Width="25"
                     VerticalAlignment="Center"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding NextPageCommand}"/>
         </Grid>
     </Grid>

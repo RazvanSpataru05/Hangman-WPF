@@ -14,9 +14,6 @@ namespace Hangman
         {
             base.OnStartup(e);
 
-            foreach (var font in Fonts.GetFontFamilies(new Uri("pack://application:,,,/"), "./Fonts/"))
-                System.Diagnostics.Debug.WriteLine(font.Source);
-
             _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {

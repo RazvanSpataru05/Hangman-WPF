@@ -9,14 +9,97 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\background.jpg" />
-    <None Remove="Fonts\PPETRIAL.ttf" />
+    <Compile Remove="Assets\Words\**" />
+    <EmbeddedResource Remove="Assets\Words\**" />
+    <None Remove="Assets\Words\**" />
+    <Page Remove="Assets\Words\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Fonts\PPETRIAL.ttf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <None Remove="Assets\Avatars\avatar_1.png" />
+    <None Remove="Assets\Avatars\avatar_2.png" />
+    <None Remove="Assets\Avatars\avatar_3.png" />
+    <None Remove="Assets\Avatars\avatar_4.png" />
+    <None Remove="Assets\Avatars\avatar_5.png" />
+    <None Remove="Assets\Avatars\avatar_6.png" />
+    <None Remove="Assets\Avatars\avatar_7.png" />
+    <None Remove="Assets\background.jpg" />
+    <None Remove="Assets\Hangman\hangman_1.png" />
+    <None Remove="Assets\Hangman\hangman_2.png" />
+    <None Remove="Assets\Hangman\hangman_3.png" />
+    <None Remove="Assets\Hangman\hangman_4.png" />
+    <None Remove="Assets\Hangman\hangman_5.png" />
+    <None Remove="Assets\Hangman\hangman_6.png" />
+    <None Remove="Assets\Hangman\hangman_7.png" />
+    <None Remove="Assets\Hangman\hangman_8.png" />
+    <None Remove="Assets\Hangman\hangman_9.png" />
+    <None Remove="Words\Biology.json" />
+    <None Remove="Words\Mathematics.json" />
+    <None Remove="Words\Physics.json" />
+    <None Remove="Words\Programming.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Avatars\avatar_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar_6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Avatars\avatar_7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_6.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_7.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_8.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Hangman\hangman_9.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Words\Biology.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Words\Mathematics.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Words\Physics.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Words\Programming.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

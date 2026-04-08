@@ -6,8 +6,40 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         FontFamily="Ink Free">
+    <Window.InputBindings>
+        <KeyBinding Key="Enter" Command="{Binding PlayCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
+    </Window.InputBindings>
+    
     <Window.Resources>
         <local:StringToImageConverter x:Key="StringToImage"/>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Ink Free"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                        </ContentPresenter>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.1" ScaleY="1.1"></ScaleTransform>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Window.Background>
@@ -32,10 +64,86 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListView Grid.Column="0" 
-              ItemsSource="{Binding Users}"
-              SelectedItem="{Binding SelectedUser}"
-              DisplayMemberPath="Name"/>
+            <Border Grid.Column="0" 
+                    Margin="10"
+                    CornerRadius="3"
+                    BorderBrush="#C8A96E"
+                    BorderThickness="1">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#E8D5A3" Offset="0"/>
+                            <GradientStop Color="#F5E6C0" Offset="0.08"/>
+                            <GradientStop Color="#FFF8DC" Offset="0.08"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"
+                Background="#C8A96E"
+                Padding="5 4">
+                        <TextBlock Text="Players"
+                       FontFamily="Ink Free"
+                       FontSize="14"
+                       Foreground="#5C3A1E"
+                       HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <ListView Grid.Row="1"
+                  ItemsSource="{Binding Users}"
+                  SelectedItem="{Binding SelectedUser}"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Border x:Name="RowBorder"
+                                                BorderBrush="#C4A882"
+                                                BorderThickness="0 0 0 1"
+                                                Padding="45 6 10 6"
+                                                Background="Transparent">
+                                                <ContentPresenter/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="RowBorder" Property="Background" Value="#DDBB8855"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="RowBorder" Property="Background" Value="#22AA8855"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"
+                                           FontFamily="Ink Free"
+                                           FontSize="17"
+                                           Foreground="#1C1C8B"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <Canvas Grid.Row="1" IsHitTestVisible="False">
+                        <Line X1="40" Y1="0" X2="40" Y2="2000"
+                                Stroke="#E8A0A0"
+                                StrokeThickness="1"
+                                Opacity="0.6"/>
+                    </Canvas>
+                </Grid>
+            </Border>
 
             <StackPanel Grid.Column="1" 
                 Orientation="Vertical"
@@ -48,23 +156,40 @@
                 <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Margin="0,10,0,0">
-                    <Button Content="&lt;&lt;" Command="{Binding PreviousImageCommand}" Width="25" Margin="15,0" Height="25"/>
-                    <Button Content="&gt;&gt;" Command="{Binding NextImageCommand}" Width="25" Margin="15,0" Height="25"/>
+                    <Button Content="&lt;&lt;" Command="{Binding PreviousImageCommand}" Style="{StaticResource ButtonStyle}"
+                            Width="25" Margin="15 0" Height="25"/>
+                    <Button Content="&gt;&gt;" Command="{Binding NextImageCommand}" Style="{StaticResource ButtonStyle}"
+                            Width="25" Margin="15 0" Height="25"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" 
-                    HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="New User" Command="{Binding NewUserCommand}" 
-                    Width="80" Margin="5,0"/>
-            <Button Content="Delete User" Command="{Binding DeleteUserCommand}" 
-                    Width="80" Margin="5,0"/>
-            <Button Content="Play" Command="{Binding PlayCommand}"
+                    HorizontalAlignment="Right" Margin="0 10 0 0">
+            <Button Content="New User" Style="{StaticResource ButtonStyle}"
+                    Command="{Binding NewUserCommand}" 
+                    Width="80" Margin="5 0"
+                    FontSize="14"
+                    FontWeight="SemiBold"/>
+
+            <Button Content="Delete User" Style="{StaticResource ButtonStyle}"
+                    Command="{Binding DeleteUserCommand}" 
+                    Width="80" Margin="5 0"
+                    FontSize="14"
+                    FontWeight="SemiBold"/>
+
+            <Button Content="Play" Style="{StaticResource ButtonStyle}"
+                    Command="{Binding PlayCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                    Width="80" Margin="5,0"/>
-            <Button Content="Cancel" Command="{Binding CancelCommand}" 
-                    Width="80" Margin="5,0"/>
+                    Width="80" Margin="5 0"
+                    FontSize="14"
+                    FontWeight="SemiBold"/>
+
+            <Button Content="Cancel" Style="{StaticResource ButtonStyle}"
+                    Command="{Binding CancelCommand}" 
+                    Width="80" Margin="5 0"
+                    FontSize="14"
+                    FontWeight="SemiBold"/>
         </StackPanel>
     </Grid>
 </Window>

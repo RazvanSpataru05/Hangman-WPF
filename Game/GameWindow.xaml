@@ -2,27 +2,84 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helper="clr-namespace:Hangman.Helper"
-        Title="Hangman" Height="600" Width="800"
+        Title="Hangman"
         WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
         ResizeMode="NoResize"
+        WindowState="Maximized"
         FontFamily="Ink Free">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" 
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <KeyBinding Command="{Binding NewGameCommand}" Gesture="Ctrl+N"/>
+        <KeyBinding Command="{Binding OpenGameCommand}" Gesture="Ctrl+O"/>
+        <KeyBinding Command="{Binding SaveGameCommand}" Gesture="Ctrl+S"/>
+        <KeyBinding Command="{Binding StatisticsCommand}" Gesture="Ctrl+T"/>
+        <KeyBinding Command="{Binding AboutCommand}" Gesture="Ctrl+H"/>
+    </Window.InputBindings>
+    
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <helper:StringToImageConverter x:Key="StringToImageConverter"/>
+        
+
+        <Style x:Key="LetterButtonStyle"  TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontFamily" Value="Ink Free"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Line x:Name="Strikethrough1"
+                              X1="5" Y1="5" X2="35" Y2="35"
+                              Stroke="Black" StrokeThickness="2"
+                              Visibility="Collapsed"/>
+                            <Line x:Name="Strikethrough2"
+                                  X1="5" Y1="35" X2="35" Y2="5"
+                                  Stroke="Black" StrokeThickness="2" 
+                                  Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Strikethrough1" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Strikethrough2" Property="Visibility" Value="Visible"/>
+                                <Setter Property="Foreground" Value="Gray"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                         </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.Background>
         <ImageBrush ImageSource="pack://application:,,,/Assets/background.jpg"
                    Stretch="UniformToFill"
                    Opacity="0.9"/>
     </Window.Background>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="New Game" Command="{Binding NewGameCommand}"/>
-                <MenuItem Header="Open Game" Command="{Binding OpenGameCommand}"/>
-                <MenuItem Header="Save Game" Command="{Binding SaveGameCommand}"/>
-                <MenuItem Header="Statistics" Command="{Binding StatisticsCommand}"/>
-                <MenuItem Header="Cancel" Command="{Binding CancelCommand}"
+                <MenuItem Header="New Game" Command="{Binding NewGameCommand}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="Open Game" Command="{Binding OpenGameCommand}" InputGestureText="Ctrl+O"/>
+                <MenuItem Header="Save Game" Command="{Binding SaveGameCommand}" InputGestureText="Ctrl+S"/>
+                <MenuItem Header="Statistics" Command="{Binding StatisticsCommand}" InputGestureText="Ctrl+T"/>
+                <MenuItem Header="Cancel" Command="{Binding CancelCommand}" InputGestureText="Esc"
                           CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"/>
             </MenuItem>
             <MenuItem Header="Categories">
@@ -88,7 +145,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="About" Command="{Binding AboutCommand}" InputGestureText="Ctrl+H"/>
             </MenuItem>
         </Menu>
 
@@ -101,7 +158,7 @@
                            FontSize="28"
                            FontWeight="Bold"
                            FontFamily="Ink Free"
-                           Margin="0,0,0,15"/>
+                           Margin="0 0 0 15"/>
                 <TextBlock Text="Select a category from the menu,"
                            HorizontalAlignment="Center"
                            FontSize="16"
@@ -152,7 +209,8 @@
 
                     <TextBlock Grid.Row="0"
                                HorizontalAlignment="Center"
-                               Margin="150,10,0,0"
+                               Margin="150 10 0 0"
+                               FontWeight="SemiBold"
                                FontFamily="Ink Free"
                                FontSize="18">
                         <Run Text="Time Left: "/>
@@ -171,39 +229,40 @@
 
                     <WrapPanel Grid.Row="2"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,10">
-                        <Button Content="A" Command="{Binding GuessLetterCommands[0]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="B" Command="{Binding GuessLetterCommands[1]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="C" Command="{Binding GuessLetterCommands[2]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="D" Command="{Binding GuessLetterCommands[3]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="E" Command="{Binding GuessLetterCommands[4]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="F" Command="{Binding GuessLetterCommands[5]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="G" Command="{Binding GuessLetterCommands[6]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="H" Command="{Binding GuessLetterCommands[7]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="I" Command="{Binding GuessLetterCommands[8]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="J" Command="{Binding GuessLetterCommands[9]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="K" Command="{Binding GuessLetterCommands[10]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="L" Command="{Binding GuessLetterCommands[11]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="M" Command="{Binding GuessLetterCommands[12]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="N" Command="{Binding GuessLetterCommands[13]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="O" Command="{Binding GuessLetterCommands[14]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="P" Command="{Binding GuessLetterCommands[15]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="Q" Command="{Binding GuessLetterCommands[16]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="R" Command="{Binding GuessLetterCommands[17]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="S" Command="{Binding GuessLetterCommands[18]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="T" Command="{Binding GuessLetterCommands[19]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="U" Command="{Binding GuessLetterCommands[20]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="V" Command="{Binding GuessLetterCommands[21]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="W" Command="{Binding GuessLetterCommands[22]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="X" Command="{Binding GuessLetterCommands[23]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="Y" Command="{Binding GuessLetterCommands[24]}" Width="35" Height="35" Margin="5"/>
-                        <Button Content="Z" Command="{Binding GuessLetterCommands[25]}" Width="35" Height="35" Margin="5"/>
+                               Margin="0 0 10 10">
+                        <Button Content="A" Command="{Binding GuessLetterCommands[0]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="B" Command="{Binding GuessLetterCommands[1]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="C" Command="{Binding GuessLetterCommands[2]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="D" Command="{Binding GuessLetterCommands[3]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="E" Command="{Binding GuessLetterCommands[4]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="F" Command="{Binding GuessLetterCommands[5]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="G" Command="{Binding GuessLetterCommands[6]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="H" Command="{Binding GuessLetterCommands[7]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="I" Command="{Binding GuessLetterCommands[8]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="J" Command="{Binding GuessLetterCommands[9]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="K" Command="{Binding GuessLetterCommands[10]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="L" Command="{Binding GuessLetterCommands[11]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="M" Command="{Binding GuessLetterCommands[12]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="N" Command="{Binding GuessLetterCommands[13]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="O" Command="{Binding GuessLetterCommands[14]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="P" Command="{Binding GuessLetterCommands[15]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="Q" Command="{Binding GuessLetterCommands[16]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="R" Command="{Binding GuessLetterCommands[17]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="S" Command="{Binding GuessLetterCommands[18]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="T" Command="{Binding GuessLetterCommands[19]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="U" Command="{Binding GuessLetterCommands[20]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="V" Command="{Binding GuessLetterCommands[21]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="W" Command="{Binding GuessLetterCommands[22]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="X" Command="{Binding GuessLetterCommands[23]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="Y" Command="{Binding GuessLetterCommands[24]}" Style="{StaticResource LetterButtonStyle}"/>
+                        <Button Content="Z" Command="{Binding GuessLetterCommands[25]}" Style="{StaticResource LetterButtonStyle}"/>
                     </WrapPanel>
                 </Grid>
                 <TextBlock Grid.Row="1" Grid.Column="0"
                            VerticalAlignment="Bottom"
                            Margin="10 5 0 10"
                            FontSize="18"
+                           FontWeight="SemiBold"
                            FontFamily="Ink Free"
                            Text="{Binding CurrentLevel, StringFormat='Level: {0}/3'}"/>
             </Grid>

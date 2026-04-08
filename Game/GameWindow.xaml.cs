@@ -12,7 +12,7 @@ namespace Hangman.Game
         }
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown(e);
+            base.OnKeyDown(e);  
             if (e.Key >= Key.A && e.Key <= Key.Z)
             {
                 var letter = (char)('A' + (e.Key - Key.A));

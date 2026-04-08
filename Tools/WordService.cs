@@ -10,7 +10,9 @@ namespace Hangman.Tools
             if (category == "AllCategories")
             {
                 List<string> allWords = new();
-                string[] files = Directory.GetFiles("Words", "*.json");
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Words");
+
+                string[] files = Directory.GetFiles(path, "*.json");
                 foreach (var file in files)
                 {
                     List<string> fileWords = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(file));
@@ -26,8 +28,8 @@ namespace Hangman.Tools
                 }
                 return "NULL";
             }
-            string filePath = $"Words/{category}.json";
-            string jsonString = File.ReadAllText(filePath);
+            string filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Words", category + ".json");
+            string jsonString = File.ReadAllText(filepath);
             List<string> words = JsonSerializer.Deserialize<List<string>>(jsonString);
             if (words != null && words.Count != 0)
             {

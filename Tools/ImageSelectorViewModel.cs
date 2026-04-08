@@ -33,8 +33,8 @@ namespace Hangman
 
         public ImageSelectorViewModel()
         {
-            string assetsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets");
-            Images = Directory.GetFiles(assetsPath, "*.png").ToList();
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/Avatars");
+            Images = Directory.GetFiles(path, "*.png").ToList();
             if (Images.Count != 0)
                 CurrentImage = Images[0];
 

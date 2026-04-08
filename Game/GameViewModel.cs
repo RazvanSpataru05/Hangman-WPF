@@ -165,7 +165,7 @@ namespace Hangman.Game
                 {
                     _timer.Stop();
                     _state = GameState.Lose;
-                    DisplayedHangmanImage = HangmanImages[HangmanImages.Count - 1];
+                    DisplayedHangmanImage = HangmanImages[HangmanImages.Count - 2];
                     var result = _dialogService.ShowGameOverWindow(Word, GameOverType.Lose, true);
                     ResetGame(result);
                 }
@@ -186,8 +186,8 @@ namespace Hangman.Game
                 GuessLetterCommands[i] = new(parameter => GuessLetter(letter),
                     _ => GuessedLetters.Contains(letter) == false);
             }
-            string hangmanPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Hangman");
-            HangmanImages = Directory.GetFiles(hangmanPath, "*.png").ToList();
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets/Hangman");
+            HangmanImages = Directory.GetFiles(path, "*.png").ToList();
             DisplayedHangmanImage = HangmanImages[Mistakes];
         }
 
@@ -233,6 +233,7 @@ namespace Hangman.Game
         }
         private void Cancel(object? parameter)
         {
+            _timer.Stop();
             var window = parameter as Window;
             _dialogService.ShowSignUpWindow();
             window?.Close();
@@ -250,9 +251,11 @@ namespace Hangman.Game
             GuessedLetters.Add(letter);
             UpdateDisplayedWord();
             CheckGameState();
+
             if (_state == GameState.Win)
             {
                 _timer.Stop();
+                DisplayedHangmanImage = HangmanImages[HangmanImages.Count-1];
                 if (CurrentLevel == 3)
                 {
                     _userService.UpdateStatistics(CurrentUser.Name, Category, true, false);
@@ -345,7 +348,10 @@ namespace Hangman.Game
             _timer.Stop();
             CurrentLevel = 1;
             if (result == true)
+            {
                 SetupGame();
+                _userService.UpdateStatistics(CurrentUser.Name, Category, false, true);
+            }
             else
             {
                 IsGameActive = false;

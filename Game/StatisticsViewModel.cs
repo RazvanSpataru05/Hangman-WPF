@@ -9,9 +9,10 @@ namespace Hangman.Game
         private Statistics _selectedStatistic;
         private List<Statistics> _displayedStatistics;
         private string _category;
+        private string _displayedCategory;
         
         public List<string> Categories { get; set; }
-        public int DisplayedCategory { get; set; }
+        public int CategoryIndex { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
         public Statistics SelectedStatistics
         {
@@ -37,6 +38,18 @@ namespace Hangman.Game
                 }
             }
         }
+        public string DisplayedCategory
+        {
+            get => _displayedCategory;
+            set
+            {
+                if (_displayedCategory != value)
+                {
+                    _displayedCategory = value;
+                    OnPropertyChanged(nameof(DisplayedCategory));
+                }
+            }
+        }
         public string Category
         {
             get => _category;
@@ -45,6 +58,11 @@ namespace Hangman.Game
                 if (_category != value)
                 {
                     _category = value;
+                    if (_category == "AllCategories")
+                        DisplayedCategory = "All Categories";
+                    else
+                        DisplayedCategory = _category; 
+
                     OnPropertyChanged(nameof(Category));
                 }
             }
@@ -56,10 +74,10 @@ namespace Hangman.Game
         {
             _userService = userService;
             Categories = _userService.LoadCategories();
-            DisplayedCategory = 0;
+            CategoryIndex = 0;
 
             if (Categories.Count > 0)
-                Category = Categories[DisplayedCategory];
+                Category = Categories[CategoryIndex];
 
             DisplayedStatistics = _userService.LoadStatistics(Category);
             NextPageCommand = new(_ => NextPage());
@@ -73,22 +91,22 @@ namespace Hangman.Game
         {
             if (Categories.Count == 0) return;
 
-            if (DisplayedCategory < Categories.Count - 1)
-                DisplayedCategory++;
+            if (CategoryIndex < Categories.Count - 1)
+                CategoryIndex++;
             else
-                DisplayedCategory = 0;
-            Category = Categories[DisplayedCategory];
+                CategoryIndex = 0;
+            Category = Categories[CategoryIndex];
             DisplayedStatistics = _userService.LoadStatistics(Category);
         }
         private void PreviousPage()
         {
             if (Categories.Count == 0) return;
 
-            if (DisplayedCategory > 0)
-                DisplayedCategory--;
+            if (CategoryIndex > 0)
+                CategoryIndex--;
             else
-                DisplayedCategory = Categories.Count - 1;
-            Category = Categories[DisplayedCategory];
+                CategoryIndex = Categories.Count - 1;
+            Category = Categories[CategoryIndex];
             DisplayedStatistics = _userService.LoadStatistics(Category);
         }
 
