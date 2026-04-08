@@ -183,13 +183,23 @@
                     <Image Source="{Binding DisplayedHangmanImage, Converter={StaticResource StringToImageConverter}}"
                            Stretch="Uniform"
                            Margin="0 150 0 0"/>
+
+                    <TextBlock
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           Margin="0 130 80 0"
+                           FontSize="28"
+                           FontWeight="SemiBold"
+                           FontFamily="Ink Free"
+                           Text="{Binding CurrentLevel, StringFormat='Level: {0}/3'}"/>
+
                     <StackPanel Orientation="Horizontal"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Left"
                                 Margin="10 10 0 0">
                         <TextBlock Text="{Binding CurrentUser.Name}"
-                                   FontSize="16"
-                                   FontWeight="Bold"
+                                   FontSize="24"
+                                   FontWeight="SemiBold"
                                    FontFamily="Ink Free"
                                    VerticalAlignment="Center"
                                    Margin="5 5 0 0"/>
@@ -209,7 +219,7 @@
 
                     <TextBlock Grid.Row="0"
                                HorizontalAlignment="Center"
-                               Margin="150 10 0 0"
+                               Margin="450 20 0 0"
                                FontWeight="SemiBold"
                                FontFamily="Ink Free"
                                FontSize="18">
@@ -258,13 +268,6 @@
                         <Button Content="Z" Command="{Binding GuessLetterCommands[25]}" Style="{StaticResource LetterButtonStyle}"/>
                     </WrapPanel>
                 </Grid>
-                <TextBlock Grid.Row="1" Grid.Column="0"
-                           VerticalAlignment="Bottom"
-                           Margin="10 5 0 10"
-                           FontSize="18"
-                           FontWeight="SemiBold"
-                           FontFamily="Ink Free"
-                           Text="{Binding CurrentLevel, StringFormat='Level: {0}/3'}"/>
             </Grid>
         </Grid>
     </DockPanel>

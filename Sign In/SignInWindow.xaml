@@ -93,7 +93,7 @@
                        HorizontalAlignment="Center"/>
                     </Border>
 
-                    <ListView Grid.Row="1"
+                  <ListView Grid.Row="1"
                   ItemsSource="{Binding Users}"
                   SelectedItem="{Binding SelectedUser}"
                   Background="Transparent"
