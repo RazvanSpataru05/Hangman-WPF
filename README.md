@@ -2,7 +2,7 @@
 A Hangman clone built in C# WPF using the MVVM architecture. Features data persistance across sessions, management of multiple users and the possibility of guessing wrods across different categories.
 
 ## Preview
-![Hangman Demo]("Media/hangman_preview.gif")
+![hangman_preview](https://github.com/user-attachments/assets/ee7b1f1d-a1cf-4a4f-8b16-b4d1d87858f0)
 
 ## Features
 * Multiple users managed at once. Upon starting the app, the player gets to choose his user before actually playing.
