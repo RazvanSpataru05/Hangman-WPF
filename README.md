@@ -2,7 +2,6 @@
 A Hangman clone built in C# WPF using the MVVM architecture. It features data persistance across sessions, management of multiple users and the possibility of guessing words across multiple categories.
 
 ## Preview
-### GIF
 ![hangman_preview](https://github.com/user-attachments/assets/ee7b1f1d-a1cf-4a4f-8b16-b4d1d87858f0)
 
 ### Screenshots
