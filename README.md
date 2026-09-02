@@ -48,10 +48,10 @@ A Hangman clone built in C# WPF using the MVVM architecture. It features data pe
 4. Guess letters by pressing them or by typing on your keyboard. You can make up to seven mistakes before losing. Each correct letter adds three seconds to the time left
 5. Guess three consecutive words to win a game.
 
-## Project Context
+### Project Context
 This project was developed by [Spătaru Răzvan-Gabriel](https://github.com/RazvanSpataru05) during the second year of studies at **Transilvania University of Brașov**.
 
 It was created as a practical application for the **Advanced Methods of Programming** course to demonstrate architectural patterns (MVVM) and UI development in C# WPF.
 
-## License
-This project is licensed under the MIT License.
+### License
+This project is licensed under the **MIT License**.
